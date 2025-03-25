@@ -3,9 +3,8 @@
 * Yapılanlar 
 1. Backeend dosya yapısı yazıldı
 2. veri tabanı bağlantısı sağlandı
+3. register ve login işlemleri postman ile kontrol edildi
 
 
 
 * Yapılacaklar
-
-1. register ve login işlemleri postman ile kontrol edilecek
