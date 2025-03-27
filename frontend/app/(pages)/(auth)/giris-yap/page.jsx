@@ -38,7 +38,7 @@ const LoginPage = () => {
            
             className=" w-full flex flex-col justify-center  items-center gap-5 mt-5"
           >
-            <div className="w-full flex items-center  p-4 gap-3 bg-[#f2efe7] rounded-lg">
+            <div className="w-full flex items-center shadow-lg  p-4 gap-3 bg-[#f2efe7] rounded-lg">
               <GoPerson className="text-2xl" />
               <input
                 onChange={handleChange}
@@ -51,7 +51,7 @@ const LoginPage = () => {
               />
             </div>
 
-            <div className="w-full flex items-center p-4 gap-3 bg-[#f2efe7] rounded-lg">
+            <div className="w-full flex items-center p-4 shadow-lg gap-3 bg-[#f2efe7] rounded-lg">
               <MdLockOutline className="text-2xl" />
               <input
                 onChange={handleChange}
