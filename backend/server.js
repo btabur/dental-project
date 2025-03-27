@@ -5,6 +5,8 @@ const connectDB = require("./config/db");
 const mainRoute = require("./routes/index.js")
 const http = require("http");
 const {Server}= require("socket.io")
+const cookieParser =require("cookie-parser") ;
+
 
 // MongoDB'ye bağlan
 connectDB();
@@ -14,8 +16,15 @@ const app = express();
 
 
 app.use(express.json({ limit: "1mb" }));
+app.use(cookieParser());
 // CORS'u aktif et
-app.use(cors());
+// CORS middleware'i ekle
+app.use(
+    cors({
+      origin: "http://localhost:3000", // Frontend adresi
+      credentials: true, // Cookies ve authentication için gerekli
+    })
+  );
 
 app.use("/api",mainRoute)
 

@@ -79,7 +79,7 @@ const RegisterPage = () => {
               <input
                 onChange={handleChange}
                 className="bg-transparent outline-none w-full"
-                type="text"
+                type="email"
                 name="email"
                 id="email"
                 placeholder="E Mailiniz"

@@ -1,9 +1,12 @@
 "use client"
+import { backendApi } from '@/app/utilis/helper';
+import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import { GoPerson } from "react-icons/go";
 import { MdLockOutline } from "react-icons/md";
+import { toast } from 'react-toastify';
 const LoginPage = () => {
 
   const router = useRouter();
@@ -12,7 +15,7 @@ const LoginPage = () => {
   const [loading,setLoading]=useState(false);
 
   const [formData, setFormData] = useState({
-    name: "",
+    email: "",
     password: "",
   });
 
@@ -26,6 +29,30 @@ const LoginPage = () => {
       setFormData({ ...formData, [id]: value });
     }
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (Object.values(formData).some((value) => !value.length)) {
+      return toast.info("Tüm alanları doldurun");
+    }
+  
+    setLoading(true);
+  
+    try {
+      await axios.post(
+        `${backendApi}/auth/login`,
+        { ...formData, rememberMe: isRemember },
+        { withCredentials: true } // Cookie'yi almak için eklemelisin!
+      );
+  
+      toast.success("Giriş Yapıldı");
+      router.push("/patient/profile");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Bir hata oluştu.");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <main className='flex'>
        <article className="lg:w-1/2 w-full mt-20 lg:mt-2  flex items-center justify-center ">
@@ -35,7 +62,7 @@ const LoginPage = () => {
             Sistemi kullanabilmek için giriş yapmalısınız
           </p>
           <form
-           
+           onSubmit={handleSubmit}
             className=" w-full flex flex-col justify-center  items-center gap-5 mt-5"
           >
             <div className="w-full flex items-center shadow-lg  p-4 gap-3 bg-[#f2efe7] rounded-lg">
@@ -43,11 +70,11 @@ const LoginPage = () => {
               <input
                 onChange={handleChange}
                 className="bg-transparent outline-none w-full"
-                type="text"
-                name="name"
-                id="name"
-                placeholder="Adınız Soyadınız"
-                value={formData.name}
+                type="email"
+                name="email"
+                id="email"
+                placeholder="E Mail Adresiniz"
+                value={formData.email}
               />
             </div>
 

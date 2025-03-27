@@ -1,20 +1,54 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv")
+const bcrypt = require("bcrypt")
 
-const generateToken = (id, role) => jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: "12m" });
+dotenv.config();
+
 
 exports.register = async (req, res) => {
-  const { name, email, password,phone, role } = req.body;
-  const user = await User.create({ name, email, password,phone, role });
+  const { name, email, password,phone} = req.body;
+  const user = await User.create({ name, email, password,phone });
   res.status(201).json(user);
 };
 
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, rememberMe } = req.body;
+
   const user = await User.findOne({ email });
-  if (!user || !(await user.matchPassword(password))) {
-    return res.status(401).json({ message: "Hatalı email veya şifre" });
+  if (!user) {
+    return res.status(400).json({ message: "Kullanıcı bulunamadı." });
   }
-  res.json({ token: generateToken(user._id, user.role), user });
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    return res.status(400).json({ message: "Hatalı şifre." });
+  }
+
+  // "Beni Hatırla" seçildiyse token süresi uzun olur
+  const tokenExpires = rememberMe ? "1m" : "1h";
+
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: tokenExpires,
+  });
+
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: false,  //! ürün ortamında true YAP
+    sameSite: "Strict",
+    maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 60 * 60 * 1000, // 7 gün veya 1 saat
+  });
+
+  res.status(200).json({ message: "Giriş başarılı." });
 };
+
+exports.logOut = async (req,res)=> {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "Strict",
+  });
+
+  res.status(200).json({ message: "Çıkış yapıldı." });
+}
 
