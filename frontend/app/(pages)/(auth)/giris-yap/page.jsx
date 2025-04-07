@@ -1,4 +1,5 @@
 "use client"
+import { useAuth } from '@/app/context/AuthContext';
 import { backendApi } from '@/app/utilis/helper';
 import axios from 'axios';
 import Image from 'next/image';
@@ -13,6 +14,7 @@ const LoginPage = () => {
   const [isRemember, setIsRemember] = useState(false);
   const [isForgetModal,setIsForgetModal]=useState(false);
   const [loading,setLoading]=useState(false);
+  const { setToken } = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -43,10 +45,13 @@ const LoginPage = () => {
         `${backendApi}/auth/login`,
         { ...formData, rememberMe: isRemember },
         { withCredentials: true } // Cookie'yi almak için eklemelisin!
-      );
+      ).then((res)=> {
+
+        toast.success("Giriş Yapıldı");
+        setToken(res.data.token);
+        router.push("/patient/profile");
+      });
   
-      toast.success("Giriş Yapıldı");
-      router.push("/patient/profile");
     } catch (error) {
       toast.error(error.response?.data?.message || "Bir hata oluştu.");
     } finally {

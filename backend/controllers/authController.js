@@ -39,7 +39,7 @@ exports.login = async (req, res) => {
     maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 60 * 60 * 1000, // 7 gün veya 1 saat
   });
 
-  res.status(200).json({ message: "Giriş başarılı." });
+  res.status(200).json({ message: "Giriş başarılı.",token:token });
 };
 
 exports.logOut = async (req,res)=> {
