@@ -1,7 +1,8 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv")
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer")
 
 dotenv.config();
 
@@ -51,4 +52,74 @@ exports.logOut = async (req,res)=> {
 
   res.status(200).json({ message: "Çıkış yapıldı." });
 }
+
+exports.forgetPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).send({ message: "Lütfen bir email girin" });
+    }
+
+    const checkUser = await User.findOne({ email });
+    if (!checkUser) {
+      return res.status(400).send({ message: "Kullanıcı bulunamadı" });
+    }
+
+    const token = jwt.sign({ email }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      secure: true,
+      auth: {
+        user: process.env.MY_GMAIL,
+        pass: process.env.MY_PASSWORD,
+      },
+    });
+
+    const receiver = {
+      from: process.env.MY_GMAIL, // Gönderen adresi env'den al
+      to: email,
+      subject: "Şifre sıfırlama",
+      text: `Yeni bir şifre oluşturmak için bu linki tıkla: ${process.env.CLIENT_URL}/reset-password/${token}`,
+    };
+
+    await transporter.sendMail(receiver);
+
+    return res.status(200).send({ message: "Sıfırlama maili gönderildi" });
+  } catch (error) {
+    console.error("Şifre sıfırlama hatası:", error);
+    return res.status(500).send({ message: "Sunucu hatası, lütfen tekrar deneyin" });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const { token } = req.query; // URL'den token al
+    const { password } = req.body;
+
+    if (!password) {
+      return res.status(400).send({ message: "Bir şifre girmelisiniz" });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await User.findOne({ email: decoded.email });
+
+    if (!user) {
+      return res.status(404).send({ message: "Kullanıcı bulunamadı" });
+    }
+
+    user.password = await bcrypt.hash(password, 10);
+    await user.save();
+
+    return res.status(200).send({ message: "Şifre başarıyla güncellendi" });
+  } catch (error) {
+    return res.status(500).send({ message: "Sunucu hatası, tekrar deneyin" });
+  }
+};
+
+
 
