@@ -8,6 +8,9 @@ import React, { useState } from 'react'
 import { GoPerson } from "react-icons/go";
 import { MdLockOutline } from "react-icons/md";
 import { toast } from 'react-toastify';
+import { jwtDecode } from 'jwt-decode';
+
+
 const LoginPage = () => {
 
   const router = useRouter();
@@ -46,10 +49,19 @@ const LoginPage = () => {
         { ...formData, rememberMe: isRemember },
         { withCredentials: true } // Cookie'yi almak için eklemelisin!
       ).then((res)=> {
-
         toast.success("Giriş Yapıldı");
+        const decodedToken = jwtDecode(res.data.token);
+
         setToken(res.data.token);
-        router.push("/patient/profile");
+        if(decodedToken.role ==="user") {
+          router.push("/patient/profile");
+        }else if( decodedToken.role ==="admin") {
+          router.push("/admin/dashboard");
+        }else if( decodedToken.role ==="nurse") {
+          router.push("/admin/nurse");
+        }else {
+          router.push("/kayit-ol");
+        }
       });
   
     } catch (error) {

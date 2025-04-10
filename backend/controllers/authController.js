@@ -28,7 +28,7 @@ exports.login = async (req, res) => {
   // "Beni Hatırla" seçildiyse token süresi uzun olur
   const tokenExpires = rememberMe ? "1m" : "1h";
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
     expiresIn: tokenExpires,
   });
 
@@ -36,10 +36,10 @@ exports.login = async (req, res) => {
     httpOnly: true,
     secure: false,  //! ürün ortamında true YAP
     sameSite: "Strict",
-    maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 60 * 60 * 1000, // 7 gün veya 1 saat
+    maxAge: rememberMe ? 30 * 24 * 60 * 60 * 1000 : 60 * 60 * 1000, // 30 gün veya 1 saat
   });
 
-  res.status(200).json({ message: "Giriş başarılı.",token:token });
+  res.status(200).json({ message: "Giriş başarılı.", token: token });
 };
 
 exports.logOut = async (req,res)=> {
