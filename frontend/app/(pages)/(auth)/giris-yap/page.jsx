@@ -9,6 +9,7 @@ import { GoPerson } from "react-icons/go";
 import { MdLockOutline } from "react-icons/md";
 import { toast } from 'react-toastify';
 import { jwtDecode } from 'jwt-decode';
+import ForgetModal from '@/app/components/ForgetModal';
 
 
 const LoginPage = () => {
@@ -125,7 +126,7 @@ const LoginPage = () => {
               {loading ? "Giriş Yapılıyor": "Giriş Yap"}
             </button>
           </form>
-            <button onClick={()=>setIsForgetModal(true)} className="hover:underline hover:text-blue-400"> Şifremi Unuttum</button>
+            <button onClick={()=>setIsForgetModal(true)} className="hover:underline hover:text-blue-400 cursor-pointer"> Şifremi Unuttum</button>
         </div>
       </article>
       <article className='hidden min-h-[93vh] w-1/2 lg:flex'>
@@ -138,6 +139,8 @@ const LoginPage = () => {
         />
 
       </article>
+
+      {isForgetModal && <ForgetModal setIsForgetModal={setIsForgetModal}/>}
     </main>
   )
 }

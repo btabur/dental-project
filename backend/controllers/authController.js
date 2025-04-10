@@ -21,6 +21,8 @@ exports.login = async (req, res) => {
     return res.status(400).json({ message: "Kullanıcı bulunamadı." });
   }
 
+  
+
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
     return res.status(400).json({ message: "Hatalı şifre." });
@@ -112,8 +114,22 @@ exports.resetPassword = async (req, res) => {
       return res.status(404).send({ message: "Kullanıcı bulunamadı" });
     }
 
-    user.password = await bcrypt.hash(password, 10);
+    // Şifreyi hash'le ve güncelle
+    user.password = password
     await user.save();
+
+    // Kullanıcıyı güncelledikten sonra, giriş yapabilmesi için bir token oluştur
+    const newToken = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    // Kullanıcıya yeni token'ı döndür
+    res.cookie("token", newToken, {
+      httpOnly: true,
+      secure: false,  //! ürün ortamında true YAP
+      sameSite: "Strict",
+      maxAge: 60 * 60 * 1000, // 1 saat
+    });
 
     return res.status(200).send({ message: "Şifre başarıyla güncellendi" });
   } catch (error) {
