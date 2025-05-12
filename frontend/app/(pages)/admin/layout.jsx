@@ -3,7 +3,7 @@ import React from 'react'
 
 const AdminLayout = ({children}) => {
   return (
-    <main className='flex min-h-[95vh] w-full bg-slate-200'>
+    <main className='flex min-h-[95vh] w-full bg-[#eff9ff]'>
       <Menu/>
       {children}
     </main>

@@ -4,13 +4,16 @@ import { useAuth } from '../context/AuthContext';
 
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { ImExit } from "react-icons/im";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { backendApi } from '../utilis/helper';
 
 const Header = () => {
   const { token,setToken } = useAuth();
+
+  const pathname = usePathname();
+  
 
   const router = useRouter()
 
@@ -39,9 +42,9 @@ const Header = () => {
         </div>
       ) : (
         <div className='flex items-center gap-3'>
-          <Link href={"/patient/profile"} className='text-3xl text-[#065985] cursor-pointer'>
+        {!pathname.includes("/admin") &&  <Link href={"/patient/profile"} className='text-3xl text-[#065985] cursor-pointer'>
            <IoPersonCircleSharp />
-          </Link>
+          </Link>}
         <button onClick={handleLogout } 
           className='text-[#f4b410] text-2xl cursor-pointer'>
             <ImExit />

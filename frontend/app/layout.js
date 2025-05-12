@@ -1,4 +1,4 @@
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
@@ -21,18 +21,18 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
   const token = cookieStore.get("token")?.value || null;
+
+
+
+  
 
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-       
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AuthProvider token={token}>
-          <Header />
+           <Header /> 
           {children}
         </AuthProvider>
         <ToastContainer />
