@@ -7,21 +7,19 @@ const nodemailer = require("nodemailer")
 dotenv.config();
 
 
-exports.register = async (req, res) => {
+const register = async (req, res) => {
   const { name, email, password,phone} = req.body;
   const user = await User.create({ name, email, password,phone });
   res.status(201).json(user);
 };
 
-exports.login = async (req, res) => {
+const login = async (req, res) => {
   const { email, password, rememberMe } = req.body;
 
   const user = await User.findOne({ email });
   if (!user) {
     return res.status(400).json({ message: "Kullanıcı bulunamadı." });
   }
-
-  
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
@@ -45,7 +43,15 @@ exports.login = async (req, res) => {
   res.status(200).json({ message: "Giriş başarılı.", token: token });
 };
 
-exports.logOut = async (req,res)=> {
+ const getMe = async (req, res) => {
+  try {
+    res.json(req.user); // authMiddleware zaten req.user dolduruyor
+  } catch (error) {
+    res.status(500).json({ error: "Bir hata oluştu", details: error.message });
+  }
+};
+
+const logOut = async (req,res)=> {
   res.clearCookie("token", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -55,7 +61,7 @@ exports.logOut = async (req,res)=> {
   res.status(200).json({ message: "Çıkış yapıldı." });
 }
 
-exports.forgetPassword = async (req, res) => {
+const forgetPassword = async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -97,7 +103,7 @@ exports.forgetPassword = async (req, res) => {
   }
 };
 
-exports.resetPassword = async (req, res) => {
+const resetPassword = async (req, res) => {
   try {
     const { token } = req.query; // URL'den token al
     const { password } = req.body;
@@ -135,6 +141,16 @@ exports.resetPassword = async (req, res) => {
   } catch (error) {
     return res.status(500).send({ message: "Sunucu hatası, tekrar deneyin" });
   }
+};
+
+
+module.exports = {
+  register,
+  login,
+  getMe,
+  logOut,
+  forgetPassword,
+  resetPassword,
 };
 
 

@@ -1,13 +1,19 @@
-import Menu from '@/app/components/admin/Menu'
-import React from 'react'
+import Menu from "@/app/components/admin/Menu";
+import Header from "../../components/admin/Header";
 
-const AdminLayout = ({children}) => {
+export const metadata = {
+  title: "Admin Panel",
+};
+
+export default function AdminLayout({ children }) {
   return (
-    <main className='flex min-h-[95vh] w-full bg-[#eff9ff]'>
-      <Menu/>
-      {children}
-    </main>
-  )
+    <html lang="en">
+      <body className="admin-body">
+        <Header />
+        <main className="flex">
+          <Menu/>
+          {children}</main>
+      </body>
+    </html>
+  );
 }
-
-export default AdminLayout

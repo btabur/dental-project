@@ -9,6 +9,7 @@ import { FaPhone } from "react-icons/fa6";
 import axios from 'axios';
 import { backendApi } from '@/app/utilis/helper';
 import { toast } from 'react-toastify';
+import Header from '@/app/components/Header';
 const RegisterPage = () => {
 
   const router = useRouter();
@@ -51,7 +52,9 @@ const RegisterPage = () => {
     
   }
   return (
-    <main className='flex'>
+   <main>
+    <Header/>
+     <main className='flex'>
        <article className="lg:w-1/2 w-full mt-20 lg:mt-2  flex items-center justify-center ">
         <div className=" md:w-1/2 w-3/4 h-[60vh] -mt-20 flex flex-col items-center gap-2 p-5">
           <h1 className="text-3xl font-semibold">Kayıt Ol</h1>
@@ -132,6 +135,7 @@ const RegisterPage = () => {
 
       </article>
     </main>
+   </main>
   )
 }
 

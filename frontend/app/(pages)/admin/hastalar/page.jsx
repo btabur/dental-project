@@ -5,17 +5,19 @@ import React, { useEffect, useState } from 'react'
 import { FaSearch } from "react-icons/fa";
 import { CiCirclePlus } from "react-icons/ci";
 import { toast } from 'react-toastify';
+import api from '@/app/utilis/api';
 const PatientsPage = () => {
 const [patients,setPatients]= useState([])
-const [chooseds,setChooseds]= useState([]);
 const [filtered,setFiltered]= useState()
 
 useEffect(()=> {
-    axios.get(`${backendApi}/user/all`)
-    .then(response=> {
-        setPatients(response.data)
-       setFiltered(response.data) 
-    }).catch(err=>console.log(err))
+  api.get("/user/all")
+  .then(response => {
+    setPatients(response.data);
+    setFiltered(response.data);
+  })
+  .catch(err => console.log(err));
+
 },[])
 const allChoose = (e)=> {
     if (e.target.checked) {
@@ -45,25 +47,6 @@ const allChoose = (e)=> {
     });
   }
 
-  const deleteSelected = async () => {
-    try {
-      // Her bir seçili öğrenci için silme işlemi yap
-      await Promise.all(
-        chooseds.map(async (patientId) => {
-          await axios.delete(`${backendApi}/user?id=${patientId}`);
-        })
-      );
-
-      // Başarılı silme işleminden sonra state'i güncelle
-      setFiltered(prev => prev.filter(patient => !chooseds.includes(patient._id)));
-      setChooseds([]); // Seçili öğrencileri temizle
-      toast.success("Seçili hastalar başarıyla silindi");
-    } catch (error) {
-      console.error("Silme işlemi sırasında hata:", error);
-      toast.error("Hastalar silinirken bir hata oluştu");
-    }
-  }
-
   return (
     <main className='w-full mt-10 ml-5'>
 
@@ -80,9 +63,7 @@ const allChoose = (e)=> {
                 Yeni Hasta Ekle
             </p>
             </div>
-            {chooseds.length >0  && 
-            <button onClick={deleteSelected}
-                className="py-2 px-8 rounded-lg cursor-pointer text-white font-semibold bg-gradient-to-r from-red-500 to-red-700"> Sil</button>}
+            
 
         </section>
      
@@ -91,22 +72,6 @@ const allChoose = (e)=> {
             <table className="min-w-full bg-white rounded-xl shadow-xl overflow-hidden border border-gray-200">
                 <thead className="bg-[#065985] text-white text-sm md:text-base">
                 <tr>
-                    <th className="p-3 text-left">
-                    <div className="flex items-center gap-2 relative group">
-                        <input
-                        type="checkbox"
-                        onChange={allChoose}
-                        id="allChoose"
-                        className="w-5 h-5 accent-yellow-400 hover:scale-110 transition-transform duration-200"
-                        />
-                        <label
-                        htmlFor="allChoose"
-                        className="cursor-pointer select-none absolute -bottom-8 left-0 w-32 bg-black text-white text-xs text-center px-2 py-1 rounded-md shadow-md hidden group-hover:block"
-                        >
-                        Hepsini Seç
-                        </label>
-                    </div>
-                    </th>
                     <th className="p-3 text-left font-semibold">Adı Soyadı</th>
                     <th className="p-3 text-left font-semibold">Telefon</th>
                     <th className="p-3 text-left font-semibold">E Mail</th>
@@ -119,14 +84,7 @@ const allChoose = (e)=> {
                         key={patient._id}
                         className="border-b border-gray-200 odd:bg-slate-50 even:bg-slate-100 hover:bg-indigo-100 transition-colors"
                     >
-                        <td className="p-2">
-                        <input
-                            type="checkbox"
-                            checked={chooseds.includes(patient._id) || false}
-                            onChange={() => handleIndividualCheck(patient._id)}
-                            className="w-5 h-5 accent-blue-500"
-                        />
-                        </td>
+                       
                         <td className="p-2 font-medium">{patient.name}</td>
                         <td className="p-2 font-medium">{patient.phone}</td>
                         <td className="p-2 font-medium">{patient.email}</td>

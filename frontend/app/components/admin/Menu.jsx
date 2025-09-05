@@ -5,7 +5,7 @@ import {
   FiLayout, 
   FiCreditCard,
   FiBarChart2,
-  FiFileText,
+
   FiClock,
   FiSettings,
   FiArrowLeft,
@@ -25,8 +25,8 @@ export default function Menu() {
   return (
     <div
       className={`${
-        collapsed ? 'w-16' : 'w-64'
-      } bg-[#0D1B2A] text-white h-screen flex flex-col justify-between p-4 transition-all duration-300`}
+        collapsed ? 'w-24' : 'w-64'
+      } bg-[#0D1B2A] text-white h-[94vh] flex flex-col justify-between p-4 transition-all duration-300`}
     >
       <div>
         {/* Profil */}
@@ -84,15 +84,10 @@ export default function Menu() {
           <li className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#1B263B]">
             <FiBarChart2 size={18} />
             <span className={`${baseText} hidden sm:inline`}>
-              Satış Raporları
+              Randevular
             </span>
           </li>
-          <li className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#1B263B]">
-            <FiFileText size={18} />
-            <span className={`${baseText} hidden sm:inline`}>
-              Finansal Raporlar
-            </span>
-          </li>
+         
           <li className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#1B263B]">
             <FiClock size={18} />
             <span className={`${baseText} hidden sm:inline`}>

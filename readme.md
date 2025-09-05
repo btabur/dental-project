@@ -10,11 +10,12 @@ yönlendirme işlemleri yapıldı
 şifre sıfırlama işlemleri yapıldı
 
 
-
+frontend- kulanıcıları listele, sil 12.05.25
+randevu oluşturma entpointi yazıldı.
+ 
 * Yapılacaklar
 
 admin 
-   frontend- kulanıcıları listele, ekle,güncelle,sil
    backend- doktor modeli ve entpointleri oluştur
    frontend -doktor listeleme,ekleme işlemleri yap (silme ve güncelleme işlemlerini doktor-detail sayfasında yap)
 

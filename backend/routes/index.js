@@ -1,4 +1,5 @@
 const express = require("express");
+const authMiddleware =require("../middlewares/authMiddleware")
 
 const router = express.Router()
 
@@ -8,8 +9,8 @@ const appointmentRoute = require("./appointmentRoutes.js")
 
 
 router.use("/auth",authRoute);
-router.use("/user",userRoute);
-router.use("/appointment",appointmentRoute)
+router.use("/user",authMiddleware,userRoute);
+router.use("/appointment",authMiddleware,appointmentRoute)
 
 
 module.exports= router;
