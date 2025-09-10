@@ -1,6 +1,7 @@
 'use client';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { FaUserDoctor } from 'react-icons/fa6';
 import {
   FiLayout, 
   FiCreditCard,
@@ -54,6 +55,13 @@ export default function Menu() {
           className={`${pathName.includes("dashboard") &&"bg-[#3a475f]"} rounded-md px-3 py-2 flex  hover:bg-[#1B263B] items-center gap-3 cursor-pointer`}>
             <FiLayout size={18} />
             <span className={`${baseText} hidden sm:inline`}>Gösterge Paneli</span>
+          </li>
+           <li onClick={()=>router.push("/admin/doktorlar")}
+             className={`${pathName.includes("doktor") &&"bg-[#3a475f]"} rounded-md px-3 py-2 flex  hover:bg-[#1B263B] items-center gap-3 cursor-pointer`}>
+           
+            <FaUserDoctor size={18} />
+            <span className={`${baseText} hidden sm:inline`}>Doktorlar</span>
+
           </li>
           <li onClick={()=>router.push("/admin/hastalar")}
              className={`${pathName.includes("hasta") &&"bg-[#3a475f]"} rounded-md px-3 py-2 flex  hover:bg-[#1B263B] items-center gap-3 cursor-pointer`}>

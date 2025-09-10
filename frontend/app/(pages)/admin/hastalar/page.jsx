@@ -19,14 +19,6 @@ useEffect(()=> {
   .catch(err => console.log(err));
 
 },[])
-const allChoose = (e)=> {
-    if (e.target.checked) {
-      setChooseds(prev => [...patients.map(patient => patient._id)]);
-    } else {
-      setChooseds(prev => []);
-    }
-  }
-
   const handleFilter = (e) => {
     const searchTerm = e.target.value.toLowerCase(); // Arama terimini küçük harfe çevir
     if (searchTerm === "") {

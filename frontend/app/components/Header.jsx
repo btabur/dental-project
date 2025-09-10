@@ -69,6 +69,13 @@ const Header = () => {
           >
             Kayıt Ol
           </Link>
+           <Link
+            href={"/online-randevu"}
+            className="py-2 px-6 border-2 border-green-500 rounded-lg text-green-500 font-semibold hover:bg-green-500 hover:text-white"
+          >
+           Online Randevu
+          </Link>
+          
         </div>
       ) : (
         <div className="flex items-center gap-3">

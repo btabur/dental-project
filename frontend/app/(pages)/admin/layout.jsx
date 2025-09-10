@@ -7,13 +7,12 @@ export const metadata = {
 
 export default function AdminLayout({ children }) {
   return (
-    <html lang="en">
-      <body className="admin-body">
-        <Header />
-        <main className="flex">
-          <Menu/>
-          {children}</main>
-      </body>
-    </html>
+    <div className="admin-body">
+      <Header />
+      <main className="flex">
+        <Menu />
+        {children}
+      </main>
+    </div>
   );
 }

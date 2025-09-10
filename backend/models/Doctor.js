@@ -2,10 +2,17 @@ const mongoose = require("mongoose");
 const User = require("./User");
 
 const doctorSchema = new mongoose.Schema({
-  specialization: { type: String },
-  availableDays: { type: [String], default: [] }, // örn: ["Monday", "Wednesday"]
-  availableHours: { type: [String], default: [] }, // örn: ["09:00", "13:00"]
-  dayOffs: { type: [String], default: [] }, // örn: ["2025-05-15", "2025-05-20"]
+  unWorkDays: [{
+  date: Date,
+  reason: String // örn: "Yıllık izin", "Kongre", "Hastalık"
+}],
+
+ availableSchedule: [{
+  day: { type: String, enum: ["Pazartesi", "Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"] },
+  startHour: String, // "09:00"
+  endHour: String,   // "17:00"
+}]
+
 });
 
 const Doctor = User.discriminator("Doctor", doctorSchema);

@@ -24,6 +24,8 @@ const Header = () => {
         err.response?.data?.message || err.message
       );
       setUser(null);
+      toast.info("Giriş yapmanız gerekir")
+      router.push("/")
     }
   };
 
