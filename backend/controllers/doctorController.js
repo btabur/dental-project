@@ -3,13 +3,23 @@ const Doctor = require("../models/Doctor");
 // ✅ Create new doctor
 const createDoctor = async (req, res) => {
   try {
-    const { name, email, phone, password, unWorkDays, availableSchedule } = req.body;
+    const { name, email, phone, password,profileImage, unWorkDays, availableSchedule } = req.body;
+
+     const exist = await Doctor.findOne({name})
+      if(exist) {
+        return res.status(400).json({error:"Bu isimde bir doktor bulunmaktadır"})
+      }
+      const existemail = await Doctor.findOne({email})
+      if(existemail) {
+        return res.status(400).json({error:"Bu email kullanılmaktadır"})
+      }
 
     const doctor = new Doctor({
       name,
       email,
       phone,
       password,
+      profileImage,
       unWorkDays,
       availableSchedule
     });

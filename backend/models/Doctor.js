@@ -11,7 +11,8 @@ const doctorSchema = new mongoose.Schema({
   day: { type: String, enum: ["Pazartesi", "Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"] },
   startHour: String, // "09:00"
   endHour: String,   // "17:00"
-}]
+}],
+profileImage: { type: String },
 
 });
 

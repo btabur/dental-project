@@ -1,5 +1,6 @@
 "use client"
 import AddDoctor from '@/app/components/admin/doctors/AddDoctor'
+import List from '@/app/components/admin/doctors/List'
 import React, { useState } from 'react'
 
 const DoctorsPage = () => {
@@ -23,6 +24,7 @@ const DoctorsPage = () => {
 
      <section >
        {active==="add" && <AddDoctor/>}
+       {active==="list" && <List/>}
      </section>
     </main>
   )

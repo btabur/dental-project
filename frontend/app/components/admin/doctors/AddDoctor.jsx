@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { CiMail } from 'react-icons/ci';
 import { FaUserMd } from 'react-icons/fa';
 import { FaLock, FaPhone, FaUser, FaUserPlus } from 'react-icons/fa6';
+import { IoLogoAppleAr } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 
 
@@ -11,9 +12,11 @@ const AddDoctor = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    profileImage:'',
     phone: '',
     password: ''
   });
+  const [fileName,setFileName]= useState()
 
   const [focusedField, setFocusedField] = useState('');
   const[loading,setLoading]=useState(false)
@@ -26,6 +29,26 @@ const AddDoctor = () => {
     }));
   };
 
+   const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+     
+  
+      // Dosya boyutunu kontrol et ( sınırı)
+      const maxSize =  1024 * 1024; // 1mb
+      if (file.size > maxSize) {
+        toast.error("Dosya boyutu 1mb'dan büyük olmamalıdır.");
+        return;
+      }
+       setFileName(file.name);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setFormData({ ...formData, profileImage: reader.result });
+      };
+    }
+  };
+
   const handleSubmit =async (e) => {
     e.preventDefault();
     try {
@@ -34,6 +57,7 @@ const AddDoctor = () => {
       name:formData.name,
       email:formData.email,
       password:formData.password,
+      profileImage:formData.profileImage,
       phone:formData.phone
     });
     toast.success("Doktor başarı ile kaydedildi");
@@ -87,6 +111,28 @@ const AddDoctor = () => {
                 />
               </div>
             </div>
+             {/* Name Field */}
+            <div className="relative">
+              <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
+                Profil Fotoğrafı
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <IoLogoAppleAr className={`w-5 h-5 transition-colors duration-200 ${
+                    focusedField === 'profileImage' ? 'text-blue-600' : 'text-gray-400'
+                  }`} />
+                </div>
+               <input
+                  onChange={handleFileChange}
+                 className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500"
+                  type="file"
+                  name="profileImage"
+                  id="profileImage"
+                  accept="image/*"
+                />
+              </div>
+            </div>
+
 
             {/* Email Field */}
             <div className="relative">
