@@ -46,7 +46,7 @@ const LoginPage = () => {
 
       // role’a göre yönlendirme
       if (user.role === "user") router.push("/patient/profile");
-      else if (user.role === "admin") router.push("/admin/dashboard");
+      else if (user.role === "Admin") router.push("/admin/dashboard");
       else if (user.role === "nurse") router.push("/admin/nurse");
       else router.push("/kayit-ol");
 

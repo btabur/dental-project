@@ -8,6 +8,8 @@ const {Server}= require("socket.io")
 const cookieParser =require("cookie-parser") ;
 const bcrypt = require("bcrypt");
 const User = require("./models/User.js");
+const { type } = require("os");
+const Admin = require("./models/Admin.js");
 
 
 // MongoDB'ye bağlan
@@ -43,17 +45,25 @@ app.set("io", io);
 
 // Uygulama açıldığında admin kullanıcısını kontrol et ve ekle
 const createDefaultAdmin = async () => {
-  const adminExists = await User.findOne({ role: "admin" });
+  const adminExists = await User.findOne({ role: "Admin" });
   if (!adminExists) {
 
-      const newAdmin = new User({
-          name:"Balı Tabur",
+      const newAdmin = new Admin({
+          name:"Alper Karabağ",
           phone:"05555 5555 55",
-          email: process.env.DEVELOPER_EMAIL,
-          password: process.env.DEVELOPER_PASSWORD,
-          role:"admin"
+          email: process.env.ADMIN_EMAIL,
+          password: process.env.ADMIN_PASSWORD,
+          type:"public"
       });
       await newAdmin.save();
+      const adminPrivate = new Admin({
+          name:"Alper Karabağ",
+          phone:"05555 5555 55",
+          email: process.env.ADMIN_EMAIL_PRIVATE,
+          password: process.env.ADMIN_PASSWORD,
+          type:"private"
+      });
+      await adminPrivate.save();
       console.log("Varsayılan admin kullanıcısı eklendi.");
   }
 };

@@ -1,4 +1,5 @@
 const Doctor = require("../models/Doctor");
+const bcrypt = require("bcrypt");
 
 // ✅ Create new doctor
 const createDoctor = async (req, res) => {
@@ -57,7 +58,7 @@ const getDoctorById = async (req, res) => {
 // ✅ Update doctor
 const updateDoctor = async (req, res) => {
   try {
-    const { name, email, phone, password, unWorkDays, availableSchedule } = req.body;
+    const { name, email, phone, password,profileImage, unWorkDays, availableSchedule } = req.body;
 
     const doctor = await Doctor.findById(req.query.id);
     if (!doctor) {
@@ -68,7 +69,11 @@ const updateDoctor = async (req, res) => {
     if (name) doctor.name = name;
     if (email) doctor.email = email;
     if (phone) doctor.phone = phone;
-    if (password) doctor.password = password; // pre-save hook sayesinde hashlenecek
+    if (profileImage) doctor.profileImage = profileImage;
+   if (password) {
+      const hashed = await bcrypt.hash(password, 10);
+      doctor.password = hashed;
+    }
     if (unWorkDays) doctor.unWorkDays = unWorkDays;
     if (availableSchedule) doctor.availableSchedule = availableSchedule;
 

@@ -1,11 +1,13 @@
 "use client"
+import api from '@/app/utilis/api';
 import React, { useState } from 'react'
 import { CiMail } from 'react-icons/ci';
 import { FaUserMd } from 'react-icons/fa';
 import { FaLock, FaPhone, FaUser } from 'react-icons/fa6';
 import { IoLogoAppleAr } from 'react-icons/io5';
+import { toast } from 'react-toastify';
 
-const EdirDoctorModal = ({doctor}) => {
+const EditDoctorModal = ({doctor,setDoctor,setIsEditing}) => {
 
      const [focusedField, setFocusedField] = useState('');
    const[loading,setLoading]=useState(false)
@@ -48,16 +50,19 @@ const EdirDoctorModal = ({doctor}) => {
         e.preventDefault();
         try {
           setLoading(true)
-        const response =  await api.post("/doctor/create",{
+        const response =  await api.put(`/doctor/update?id=${doctor._id}`,{
           name:formData.name,
           email:formData.email,
           password:formData.password,
           profileImage:formData.profileImage,
           phone:formData.phone
         });
-        toast.success("Doktor başarı ile kaydedildi");
-        console.log(response.data);
-        setLoading(false)
+
+        setDoctor(response.data)
+        toast.success("Doktor başarı ile güncellendi");
+        setLoading(false);
+        setIsEditing(false)
+        
         } catch (error) {
           console.log(error);
           toast.error(error.response?.data?.message || "Doktor eklerken bir hata oluştu");
@@ -67,12 +72,17 @@ const EdirDoctorModal = ({doctor}) => {
       
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="w-[75%] mt-28">
+        <div className="w-[75%] mt-10">
               
                {/* Form Card */}
                <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 backdrop-blur-sm">
-                 <div className="space-y-6">
+                 <div className="space-y-6 relative">
                     <h2 className='text-center text-2xl font-semibold'> Doktor Bilgilerini Düzenle</h2>
+
+                    <button 
+                    onClick={()=>setIsEditing(false)}
+                    className='p-3 bg-black w-8 h-8 font-semibold rounded-full text-white flex items-center justify-center
+                    absolute top-0 right-0 cursor-pointer'>X</button>
                    {/* Name Field */}
                    <div className="relative">
                      <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
@@ -224,4 +234,4 @@ const EdirDoctorModal = ({doctor}) => {
   )
 }
 
-export default EdirDoctorModal
+export default EditDoctorModal

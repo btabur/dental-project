@@ -1,14 +1,13 @@
 "use client"
-import EdirDoctorModal from '@/app/components/admin/doctors/EdirDoctorModal';
+import EditDoctorModal from '@/app/components/admin/doctors/EditDoctorModal';
 import api from '@/app/utilis/api';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { CiMail } from 'react-icons/ci';
-import { FaEdit, FaMailBulk, FaSave, FaUserMd } from 'react-icons/fa';
-import { FaCalendar, FaClock, FaLock, FaMapPin, FaPhone, FaUser, FaUserPlus } from 'react-icons/fa6';
+import { FaEdit, FaMailBulk, FaSave } from 'react-icons/fa';
+import { FaCalendar, FaClock, FaPhone } from 'react-icons/fa6';
 import { FiAlertCircle } from 'react-icons/fi';
-import { IoCloseOutline, IoLogoAppleAr, IoPersonOutline, IoTimeOutline } from 'react-icons/io5';
+import { IoCloseOutline, IoPersonOutline } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 
 
@@ -270,7 +269,7 @@ const DoctorDetailPanel = () => {
       )}
       {/* bilgileri düzenle modal */}
       {isEditing && (
-        <EdirDoctorModal doctor={doctor} />      )}
+        <EditDoctorModal doctor={doctor} setDoctor={setDoctor} setIsEditing={setIsEditing} />      )}
     </div>
   );
 };
