@@ -3,11 +3,11 @@ import api from '@/app/utilis/api';
 import React, { useState } from 'react'
 import { CiMail } from 'react-icons/ci';
 import { FaUserMd } from 'react-icons/fa';
-import { FaLock, FaPhone, FaUser } from 'react-icons/fa6';
+import { FaLock, FaPhone, FaTypo3, FaUser } from 'react-icons/fa6';
 import { IoLogoAppleAr } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 
-const EditDoctorModal = ({doctor,setDoctor,setIsEditing}) => {
+const EditDoctorModal = ({doctor,setDoctor,setIsEditing,admin}) => {
 
      const [focusedField, setFocusedField] = useState('');
    const[loading,setLoading]=useState(false)
@@ -17,7 +17,8 @@ const EditDoctorModal = ({doctor,setDoctor,setIsEditing}) => {
       email: doctor?.email || "",
       profileImage:doctor?.profileImage || "",
       phone: doctor?.phone || "",
-      password: "****"
+      password: "****",
+      type: doctor?.type || "public"
     });
     const handleInputChange = (e) => {
           const { name, value } = e.target;
@@ -55,7 +56,8 @@ const EditDoctorModal = ({doctor,setDoctor,setIsEditing}) => {
           email:formData.email,
           password:formData.password,
           profileImage:formData.profileImage,
-          phone:formData.phone
+          phone:formData.phone,
+          type:formData.type
         });
 
         setDoctor(response.data)
@@ -208,6 +210,34 @@ const EditDoctorModal = ({doctor,setDoctor,setIsEditing}) => {
                        />
                      </div>
                    </div>
+
+                    {/* Change Type */}
+                   {admin.type==="public" && <div className="relative">
+                     <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-2">
+                       Kullanıcı Türü
+                     </label>
+                     <div className="relative">
+                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                         <FaTypo3 className={`w-5 h-5 transition-colors duration-200 ${
+                           focusedField === 'type' ? 'text-blue-600' : 'text-gray-400'
+                         }`} />
+                       </div>
+                        <select 
+                        onChange={handleInputChange}
+                        value={formData.type}
+                        name="type"
+                        id='type'
+                         className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500"
+                          onFocus={() => setFocusedField('type')}
+                         onBlur={() => setFocusedField('')}
+                        >
+                          <option disabled>Kullanıcı Türü Seçin </option>
+                          <option  value={"public"}>Genel</option>
+                          <option value={"private"}>Özel</option>
+                        </select>
+                     </div>
+                   </div>}
+
        
                    {/* Submit Button */}
                    <button

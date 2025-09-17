@@ -10,7 +10,9 @@ import { FiLoader } from 'react-icons/fi'
 const List = () => {
   const [doctors, setDoctors] = useState([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState(null);
+  const [admin,setAdmin]= useState();
+  const [filteredDoctors,setFilteredDoctors] = useState([])
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -27,7 +29,23 @@ const List = () => {
     }
 
     fetchDoctors()
+      api.get("/auth/me").then(res=> {
+    setAdmin(res.data)
+    }).catch(err=>console.log(err)
+    )
+
   }, [])
+
+  useEffect(()=> {
+    if(!admin || !doctors) return
+    if(admin.type==="private") {
+        const filtered = doctors.filter(doc => doc.type !== admin.type)
+    setFilteredDoctors(filtered)
+    }else {
+      setFilteredDoctors(doctors)
+    }
+
+  },[admin,doctors])
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('tr-TR', {
@@ -84,13 +102,13 @@ const List = () => {
           </p>
           <div className="mt-4 inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
             <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
-            Toplam {doctors.length} doktor
+            Toplam {filteredDoctors.length} doktor
           </div>
         </div>
 
         {/* Doctor Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {doctors.map((doctor, index) => (
+          {filteredDoctors.map((doctor, index) => (
             <div
               key={doctor._id}
               className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-200"

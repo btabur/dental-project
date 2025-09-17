@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   role: { type: String, required: true, enum: ["patient", "doctor","nurse","account", "admin"] },
   password: { type: String, required: true },
-  type: { type: String, enum:["public","private"] },
+  type: { type: String, enum:["public","private"], default:"public" },
 }, options);
 
 userSchema.pre("save", async function (next) {

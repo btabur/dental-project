@@ -49,6 +49,7 @@ const getDoctorById = async (req, res) => {
     if (!doctor) {
       return res.status(404).json({ message: "Doctor not found" });
     }
+
     res.status(200).json(doctor);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -58,7 +59,7 @@ const getDoctorById = async (req, res) => {
 // ✅ Update doctor
 const updateDoctor = async (req, res) => {
   try {
-    const { name, email, phone, password,profileImage, unWorkDays, availableSchedule } = req.body;
+    const { name, email, phone, password,profileImage,type, unWorkDays, availableSchedule } = req.body;
 
     const doctor = await Doctor.findById(req.query.id);
     if (!doctor) {
@@ -69,6 +70,7 @@ const updateDoctor = async (req, res) => {
     if (name) doctor.name = name;
     if (email) doctor.email = email;
     if (phone) doctor.phone = phone;
+    if (type) doctor.type = type;
     if (profileImage) doctor.profileImage = profileImage;
    if (password) {
       const hashed = await bcrypt.hash(password, 10);

@@ -5,6 +5,7 @@ import {useRouter } from "next/navigation";
 import { ImExit } from "react-icons/im";
 import { useEffect, useState } from "react";
 import api from "../../utilis/api";
+import { MdPublic } from "react-icons/md";
 
 const Header = () => {
 
@@ -53,6 +54,7 @@ const Header = () => {
 
       {user &&  (
         <div className="flex items-center gap-3">
+          {user.type==="public" && <MdPublic className="text-2xl text-blue-500"/>}
           <button
             onClick={handleLogout}
             className="text-[#f4b410] text-2xl cursor-pointer"

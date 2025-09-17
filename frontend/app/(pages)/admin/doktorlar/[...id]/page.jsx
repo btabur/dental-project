@@ -1,4 +1,5 @@
 "use client"
+import AddWorkHourModal from '@/app/components/admin/doctors/AddWorkHourModal';
 import EditDoctorModal from '@/app/components/admin/doctors/EditDoctorModal';
 import api from '@/app/utilis/api';
 import Image from 'next/image';
@@ -7,7 +8,8 @@ import React, { useEffect, useState } from 'react';
 import { FaEdit, FaMailBulk, FaSave } from 'react-icons/fa';
 import { FaCalendar, FaClock, FaPhone } from 'react-icons/fa6';
 import { FiAlertCircle } from 'react-icons/fi';
-import { IoCloseOutline, IoPersonOutline } from 'react-icons/io5';
+import { IoAdd, IoCloseOutline, IoPersonOutline } from 'react-icons/io5';
+import { MdEdit } from 'react-icons/md';
 import { toast } from 'react-toastify';
 
 
@@ -18,6 +20,7 @@ const DoctorDetailPanel = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [doctor,setDoctor] = useState();
   const [addModal,setAddModal]= useState(false);
+  const [admin,setAdmin]= useState();
   
 
   useEffect(()=> {
@@ -29,6 +32,11 @@ const DoctorDetailPanel = () => {
       toast.error("Doktor verilerini alırken hata oluştu")
       
     })
+
+    api.get("/auth/me").then(res=> {
+    setAdmin(res.data)
+    }).catch(err=>console.log(err)
+    )
   },[])
   
   // Örnek doktor verisi
@@ -136,19 +144,23 @@ const DoctorDetailPanel = () => {
 
                 </div>
                
-                <button
+               <div className='flex items-center gap-3'> <button
                 onClick={()=>setAddModal(true)}
-                 className='py-2 px-8 rounded-lg text-white bg-gradient-to-l cursor-pointer shadow-lg to-blue-500 from-blue-600'>
-                  Ekle</button>
+                 className='p-2  text-xl font-semibold rounded-full text-white bg-gradient-to-l cursor-pointer shadow-lg to-blue-500 from-green-600'>
+                  <IoAdd /></button>
+                   <button
+                onClick={()=>setAddModal(true)}
+                 className='p-2  text-xl font-semibold rounded-full text-white bg-gradient-to-l cursor-pointer shadow-lg to-green-500 from-blue-600'>
+                  <MdEdit /></button></div>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {doctorData.workingDays.map((schedule, index) => (
-                  <div key={index} className={getDayClassName(schedule.isActive)}>
+                {doctor?.availableSchedule.map((schedule, index) => (
+                  <div key={index} className=' bg-green-200 py-5 px-10 rounded-lg '>
                     <div>
                       <h3 className="font-semibold text-lg">{schedule.day}</h3>
                       <p className="text-sm opacity-75">
-                        {schedule.isActive ? `${schedule.startTime} - ${schedule.endTime}` : 'Kapalı'}
+                          {schedule.startHour} - {schedule.endHour}
                       </p>
                     </div>
                     {schedule.isActive && (
@@ -228,48 +240,16 @@ const DoctorDetailPanel = () => {
         </div>
       </div>
       {/* çalışma saati ekle modal */}
-      {addModal && (
-         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-[70%] max-h-[90vh] overflow-hidden">
-            {/* Modal Header */}
-            <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-white">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-2xl font-bold">Çalışma Saati Ekle</h2>
-                  <div className="flex items-center gap-4 mt-2 text-blue-100">
-                    <div className="flex items-center gap-1">
-                      <IoPersonOutline />
-                      <span className="text-sm">{doctor?.name}</span>
-                    </div>
-                 
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setAddModal(false)}
-                  className="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-xl flex items-center 
-                           justify-center transition-all duration-200"
-                >
-                  <IoCloseOutline className="text-2xl" />
-                </button>
-              </div>
-            </div>
-
-            {/* Modal Content */}
-            <div className="p-6 max-h-[60vh] overflow-y-auto">
-              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                
-               
-
-               
-              </div>
-            </div>
-          </div>
-        </div>
-
-      )}
+      {addModal && <AddWorkHourModal setAddModal={setAddModal} doctor={doctor} setDoctor={setDoctor}/>}
       {/* bilgileri düzenle modal */}
       {isEditing && (
-        <EditDoctorModal doctor={doctor} setDoctor={setDoctor} setIsEditing={setIsEditing} />      )}
+        <EditDoctorModal  
+        doctor={doctor} 
+        setDoctor={setDoctor} 
+        setIsEditing={setIsEditing}
+        admin={admin}
+         />     
+          )}
     </div>
   );
 };
