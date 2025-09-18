@@ -1,8 +1,9 @@
 import api from "@/app/utilis/api";
 import React, { useState } from "react";
 import { IoCloseOutline, IoPersonOutline } from "react-icons/io5";
+import { toast } from "react-toastify";
 
-const AddWorkHourModal = ({ doctor, setDoctor, setAddModal }) => {
+const AddWorkHourModal = ({ doctor, setDoctor, setAddWorkHour }) => {
   const [workHour, setWorkHour] = useState({
     day: "",
     start: "",
@@ -45,7 +46,8 @@ const AddWorkHourModal = ({ doctor, setDoctor, setAddModal }) => {
     }));
 
     // Modalı kapat
-    setAddModal(false);
+    setAddWorkHour(false);
+    toast.success("Çalışma Saati başarıyla eklendi");
   } catch (error) {
     console.error("Çalışma saati eklenirken hata:", error);
   }
@@ -68,7 +70,7 @@ const AddWorkHourModal = ({ doctor, setDoctor, setAddModal }) => {
               </div>
             </div>
             <button
-              onClick={() => setAddModal(false)}
+              onClick={() => setAddWorkHour(false)}
               className="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center transition-all duration-200"
             >
               <IoCloseOutline className="text-2xl" />

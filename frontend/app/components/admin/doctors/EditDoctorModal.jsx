@@ -7,7 +7,7 @@ import { FaLock, FaPhone, FaTypo3, FaUser } from 'react-icons/fa6';
 import { IoLogoAppleAr } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 
-const EditDoctorModal = ({doctor,setDoctor,setIsEditing,admin}) => {
+const EditDoctorModal = ({doctor,setDoctor,setEditProfile,admin}) => {
 
      const [focusedField, setFocusedField] = useState('');
    const[loading,setLoading]=useState(false)
@@ -63,7 +63,7 @@ const EditDoctorModal = ({doctor,setDoctor,setIsEditing,admin}) => {
         setDoctor(response.data)
         toast.success("Doktor başarı ile güncellendi");
         setLoading(false);
-        setIsEditing(false)
+        setEditProfile(false)
         
         } catch (error) {
           console.log(error);
@@ -73,8 +73,8 @@ const EditDoctorModal = ({doctor,setDoctor,setIsEditing,admin}) => {
       };
       
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="w-[75%] mt-10">
+    <div className="fixed  inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="w-[75%] h-[90vh] overflow-y-auto rounded-lg mt-10">
               
                {/* Form Card */}
                <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 backdrop-blur-sm">
@@ -82,7 +82,7 @@ const EditDoctorModal = ({doctor,setDoctor,setIsEditing,admin}) => {
                     <h2 className='text-center text-2xl font-semibold'> Doktor Bilgilerini Düzenle</h2>
 
                     <button 
-                    onClick={()=>setIsEditing(false)}
+                    onClick={()=>setEditProfile(false)}
                     className='p-3 bg-black w-8 h-8 font-semibold rounded-full text-white flex items-center justify-center
                     absolute top-0 right-0 cursor-pointer'>X</button>
                    {/* Name Field */}
