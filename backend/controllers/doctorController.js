@@ -59,7 +59,7 @@ const getDoctorById = async (req, res) => {
 // ✅ Update doctor
 const updateDoctor = async (req, res) => {
   try {
-    const { name, email, phone, password,profileImage,type, unWorkDays, availableSchedule } = req.body;
+    const { name, email, phone, password,profileImage,type, unWorkDays, unWorkHours,availableSchedule } = req.body;
 
     const doctor = await Doctor.findById(req.query.id);
     if (!doctor) {
@@ -77,6 +77,7 @@ const updateDoctor = async (req, res) => {
       doctor.password = hashed;
     }
     if (unWorkDays) doctor.unWorkDays = unWorkDays;
+    if (unWorkHours) doctor.unWorkHours = unWorkHours;
     if (availableSchedule) doctor.availableSchedule = availableSchedule;
 
     await doctor.save();

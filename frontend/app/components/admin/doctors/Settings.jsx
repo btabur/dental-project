@@ -4,13 +4,16 @@ import { FaEdit } from 'react-icons/fa';
 import { FaCalendar, FaCalendarCheck, FaClock, FaUser } from 'react-icons/fa6';
 import { FiSettings } from 'react-icons/fi';
 import EditDoctorModal from './EditDoctorModal';
-import AddWorkHourModal from './AddWorkHourModal';
+
+import EditWorkHour from './EditWorkHour';
+import PermissionHour from './PermissionHour';
 
 
 const Settings = ({doctor,setDoctor,admin}) => {
 
     const [editProfile,setEditProfile] = useState(false);
-    const [addWorkHour,setAddWorkHour] = useState(false)
+    const [editWorkHour,setEditWorkHour] = useState(false);
+    const [editPerminssionHour,setEditPermissionHour] = useState(false)
   const settingsOptions = [
     {
       id: 1,
@@ -21,51 +24,30 @@ const Settings = ({doctor,setDoctor,admin}) => {
       hoverColor: 'hover:from-blue-600 hover:to-blue-700',
       onClick: ()=> setEditProfile(true)
     },
+   
     {
       id: 2,
-      title: 'Çalışma Saati Ekle',
-      description: 'Yeni çalışma saatlerinizi sistemize ekleyin',
-      icon: FaClock,
-      color: 'from-emerald-500 to-emerald-600',
-      hoverColor: 'hover:from-emerald-600 hover:to-emerald-700',
-      onClick: ()=> setAddWorkHour(true)
-    },
-    {
-      id: 3,
       title: 'Çalışma Saati Düzenle',
       description: 'Mevcut çalışma saatlerinizi değiştirin',
       icon: FaEdit,
       color: 'from-purple-500 to-purple-600',
-      hoverColor: 'hover:from-purple-600 hover:to-purple-700'
-    },
-    {
-      id: 4,
-      title: 'İzin Gir (Gün)',
-      description: 'Tam gün izinlerinizi kaydedin',
-      icon: FaCalendar,
-      color: 'from-orange-500 to-orange-600',
-      hoverColor: 'hover:from-orange-600 hover:to-orange-700'
+      hoverColor: 'hover:from-purple-600 hover:to-purple-700',
+      onClick: () => setEditWorkHour(true)
     },
     {
       id: 5,
-      title: 'İzin Gir (Saat)',
-      description: 'Saatlik izin taleplerini oluşturun',
+      title: 'İzin Gir',
+      description: 'Doktorun izin günlerini ve saatlerini yönetin',
       icon: FaCalendarCheck,
       color: 'from-rose-500 to-rose-600',
-      hoverColor: 'hover:from-rose-600 hover:to-rose-700'
+      hoverColor: 'hover:from-rose-600 hover:to-rose-700', 
+      onClick: () => setEditPermissionHour(true)
     },
-    {
-      id: 6,
-      title: 'İzinleri Düzenle',
-      description: 'Mevcut izin kayıtlarınızı yönetin',
-      icon: FiSettings,
-      color: 'from-indigo-500 to-indigo-600',
-      hoverColor: 'hover:from-indigo-600 hover:to-indigo-700'
-    }
+   
   ];
 
   return (
-    <div className="h-[89vh] overflow-y-auto bg-gradient-to-br from-slate-50 to-slate-100 p-6">
+    <div className="h-[89vh] overflow-y-auto bg-gradient-to-br from-slate-50 to-slate-100 p-6 relative">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -139,8 +121,12 @@ const Settings = ({doctor,setDoctor,admin}) => {
       admin={admin} 
       setEditProfile={setEditProfile} />}
 
-      {addWorkHour && (
-        <AddWorkHourModal doctor={doctor} setDoctor={setDoctor} setAddWorkHour={setAddWorkHour}/>
+     
+      {editWorkHour && (
+        <EditWorkHour doctor={doctor} setDoctor={setDoctor}  setEditWorkHour={setEditWorkHour}/>
+      )}
+      {editPerminssionHour && (
+        <PermissionHour doctor={doctor} setDoctor={setDoctor} setEditPermissionHour={setEditPermissionHour} />
       )}
 
     </div>
